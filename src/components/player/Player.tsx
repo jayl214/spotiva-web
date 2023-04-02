@@ -64,11 +64,18 @@ export const Player = () => {
   }
 
   const createNewRound = useCallback(() => {
+    const item = currentlyPlaying?.item
+
+    if(!item ||!("album" in item)) {
+      // if item doesn't exist or if item is a podcast episode, then exit
+      return;
+    }
+
     randomizeColour()
     const solutions = {
-      name: currentlyPlaying?.item?.name || '',
-      releaseYear: parseInt(currentlyPlaying?.item?.album?.release_date.slice(0,5) || ''),
-      artist: (currentlyPlaying?.item?.artists?.[0]?.name || '') as string
+      name: item?.name || '',
+      releaseYear: parseInt(item?.album?.release_date.slice(0,5) || ''),
+      artist: item?.artists?.[0]?.name || ''
     }
     const newRound = {
       id: songId,
